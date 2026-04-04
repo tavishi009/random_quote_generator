@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quote Generator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f7f7f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .container { width: 100%; max-width: 600px; }
+
+    /* FILTER TAGS */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .tag {
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      font-size: 12px;
+      cursor: pointer;
+      background: #fff;
+      color: #888;
+      text-transform: capitalize;
+    }
+    .tag.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .tag:hover:not(.active) { background: #f0f0f0; }
+
+    /* CARD */
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .quote-icon {
+      font-size: 48px;
+      color: #ccc;
+      font-family: Georgia, serif;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-text {
+      font-size: 20px;
+      font-weight: 400;
+      color: #111;
+      line-height: 1.7;
+      font-style: italic;
+      min-height: 90px;
+      transition: opacity 0.3s ease;
+    }
+
+    .quote-author {
+      margin-top: 1.25rem;
+      font-size: 13px;
+      color: #888;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: opacity 0.3s ease;
+    }
+
+    .quote-category {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      background: #f5f5f5;
+      color: #888;
+      border: 1px solid #e5e5e5;
+      text-transform: capitalize;
+    }
+
+    .divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 2rem 0;
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #111;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #f5f5f5; }
+
+    .btn.primary {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .btn.primary:hover { background: #333; }
+
+    .copied-msg {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #27ae60;
+      min-height: 18px;
+      text-align: center;
+    }
+
+    .counter {
+      margin-top: 1.25rem;
+      font-size: 12px;
+      color: #bbb;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- CATEGORY FILTERS -->
+  <div class="filter-row" id="filterRow"></div>
+
+  <!-- QUOTE CARD -->
+  <div class="card">
+    <div class="quote-icon">"</div>
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-author" id="quoteAuthor"></div>
+    <div class="quote-category" id="quoteCategory"></div>
+
+    <div class="divider"></div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="copyQuote()">Copy</button>
+      <button class="btn primary" onclick="newQuote()">New quote</button>
+    </div>
+    <div class="copied-msg" id="copiedMsg"></div>
+  </div>
+
+  <div class="counter" id="counter"></div>
+
+</div>
+
+<script>
+  // ── Quote Data ────────────────────────────────────────────
+  const quotes = [
+    { text: "The only way to do great work is to love what you do.", author: "Steve Jobs", category: "motivation" },
+    { text: "In the middle of every difficulty lies opportunity.", author: "Albert Einstein", category: "wisdom" },
+    { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius", category: "motivation" },
+    { text: "Life is what happens when you are busy making other plans.", author: "John Lennon", category: "life" },
+    { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt", category: "motivation" },
+    { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci", category: "wisdom" },
+    { text: "You miss 100% of the shots you do not take.", author: "Wayne Gretzky", category: "motivation" },
+    { text: "Whether you think you can or you think you cannot, you are right.", author: "Henry Ford", category: "mindset" },
+    { text: "The journey of a thousand miles begins with one step.", author: "Lao Tzu", category: "wisdom" },
+    { text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", author: "Ralph Waldo Emerson", category: "life" },
+    { text: "Success is not final, failure is not fatal — it is the courage to continue that counts.", author: "Winston Churchill", category: "motivation" },
+    { text: "Knowing yourself is the beginning of all wisdom.", author: "Aristotle", category: "wisdom" },
+    { text: "Code is like humor. When you have to explain it, it is bad.", author: "Cory House", category: "coding" },
+    { text: "First, solve the problem. Then, write the code.", author: "John Johnson", category: "coding" },
+    { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler", category: "coding" },
+    { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson", category: "coding" },
+    { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb", category: "life" },
+    { text: "Do not watch the clock. Do what it does — keep going.", author: "Sam Levenson", category: "motivation" },
+    { text: "Hard work beats talent when talent does not work hard.", author: "Tim Notke", category: "mindset" },
+    { text: "Your limitation is only your imagination.", author: "Unknown", category: "mindset" },
+  ];
+
+  // ── Setup ─────────────────────────────────────────────────
+  const categories = ['all', ...new Set(quotes.map(q => q.category))];
+  let activeCategory = 'all';
+  let shown = 0;
+
+  // ── Render Filter Tags ────────────────────────────────────
+  function renderFilters() {
+    document.getElementById('filterRow').innerHTML = categories.map(c =>
+      `<span class="tag ${c === activeCategory ? 'active' : ''}" onclick="setCategory('${c}')">${c}</span>`
+    ).join('');
+  }
+
+  function setCategory(cat) {
+    activeCategory = cat;
+    renderFilters();
+    newQuote();
+  }
+
+  // ── Get Quote Pool ────────────────────────────────────────
+  function getPool() {
+    return activeCategory === 'all'
+      ? quotes
+      : quotes.filter(q => q.category === activeCategory);
+  }
+
+  // ── Show New Quote ────────────────────────────────────────
+  function newQuote() {
+    const pool = getPool();
+    const q = pool[Math.floor(Math.random() * pool.length)];
+
+    const textEl   = document.getElementById('quoteText');
+    const authorEl = document.getElementById('quoteAuthor');
+    const catEl    = document.getElementById('quoteCategory');
+
+    // Fade out
+    textEl.style.opacity   = '0';
+    authorEl.style.opacity = '0';
+
+    setTimeout(() => {
+      textEl.textContent   = q.text;
+      authorEl.textContent = '— ' + q.author;
+      catEl.textContent    = q.category;
+
+      // Fade in
+      textEl.style.opacity   = '1';
+      authorEl.style.opacity = '1';
+
+      shown++;
+      document.getElementById('counter').textContent =
+        shown + ' quote' + (shown === 1 ? '' : 's') + ' viewed';
+    }, 250);
+
+    document.getElementById('copiedMsg').textContent = '';
+  }
+
+  // ── Copy to Clipboard ─────────────────────────────────────
+  function copyQuote() {
+    const text   = document.getElementById('quoteText').textContent;
+    const author = document.getElementById('quoteAuthor').textContent;
+    navigator.clipboard.writeText('"' + text + '" ' + author).then(() => {
+      document.getElementById('copiedMsg').textContent = 'Copied to clipboard!';
+      setTimeout(() => document.getElementById('copiedMsg').textContent = '', 2500);
+    });
+  }
+
+  // ── Init ──────────────────────────────────────────────────
+  renderFilters();
+  newQuote();
+</script>
+
+</body>
+</html>
