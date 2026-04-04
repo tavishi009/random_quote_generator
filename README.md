@@ -1,4 +1,4 @@
-# Random Quote Generator
+#  Random Quote Generator
 
 A simple web app that shows you a random quote every time you click a button. Built this as a beginner project to practice HTML, CSS, and JavaScript.
 
