@@ -9,7 +9,7 @@ A simple web app that shows you a random quote every time you click the button.
 - Shows random quotes from categories like motivation, wisdom, coding, and more.
 - Filter by category to match your mood.
 - Copy any quote to clipboard with one click.
-- Smooth fade animation between quotes
+- Smooth fade animation between quotes.
 
 ---
 
