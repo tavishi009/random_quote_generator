@@ -6,15 +6,15 @@ A simple web app that shows you a random quote every time you click the button.
 
 ## What it does
 
-- Shows random quotes from categories like motivation, wisdom, coding, and more
-- Filter by category to match your mood
-- Copy any quote to clipboard with one click
+- Shows random quotes from categories like motivation, wisdom, coding, and more.
+- Filter by category to match your mood.
+- Copy any quote to clipboard with one click.
 - Smooth fade animation between quotes
 
 ---
 
 ## How to run it
-
+ 
 Just download the file and open it in your browser. That's it — no setup, no install, nothing.
 
 ---
