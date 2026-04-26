@@ -10,6 +10,7 @@ A simple web app that shows you a random quote every time you click the button.
 - Filter by category to match your mood.
 - Copy any quote to clipboard with one click.
 - Smooth fade animation between quotes.
+- 20+ quotes across 5 categories — motivation, wisdom, life, mindset, and coding.
 
 ---
 
