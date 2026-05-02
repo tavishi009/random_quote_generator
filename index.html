@@ -251,14 +251,19 @@
   }
 
   // ── Copy to Clipboard ─────────────────────────────────────
-  function copyQuote() {
-    const text   = document.getElementById('quoteText').textContent;
-    const author = document.getElementById('quoteAuthor').textContent;
-    navigator.clipboard.writeText('"' + text + '" ' + author).then(() => {
-      document.getElementById('copiedMsg').textContent = 'Copied to clipboard!';
-      setTimeout(() => document.getElementById('copiedMsg').textContent = '', 2500);
-    });
-  }
+function copyQuote() {
+  const text   = document.getElementById('quoteText').textContent;
+  const author = document.getElementById('quoteAuthor').textContent;
+  const full   = '"' + text + '" ' + author;
+  navigator.clipboard.writeText(full).then(() => {
+    const btn = document.querySelector('.btn[onclick="copyQuote()"]');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 2000);
+    document.getElementById('copiedMsg').textContent = 'Copied to clipboard!';
+    setTimeout(() => document.getElementById('copiedMsg').textContent = '', 2500);
+  });
+}
 
   // ── Init ──────────────────────────────────────────────────
   renderFilters();
