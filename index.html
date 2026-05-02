@@ -158,7 +158,7 @@
 
     <div class="btn-row">
       <button class="btn" onclick="copyQuote()">Copy</button>
-      <button class="btn primary" onclick="newQuote()">New quote</button>
+      <button class="btn primary" onclick="newQuote()" id="newBtn">New quote</button>
     </div>
     <div class="copied-msg" id="copiedMsg"></div>
   </div>
@@ -222,6 +222,9 @@
 
   // ── Show New Quote ────────────────────────────────────────
   function newQuote() {
+    const btn = document.getElementById('newBtn');
+    btn.textContent = 'Loading...';
+    setTimeout(() => btn.textContent = 'New quote', 300);
     const pool = getPool();
     const q = pool[Math.floor(Math.random() * pool.length)];
 
