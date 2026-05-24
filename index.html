@@ -264,6 +264,7 @@
       authorEl.style.opacity = '1';
 
       shown++;
+      document.title = '"' + q.text.slice(0, 30) + '..." — Quote Generator';
       document.getElementById('counter').textContent =
         shown + ' quote' + (shown === 1 ? '' : 's') + ' viewed';
     }, 250);
