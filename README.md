@@ -35,3 +35,5 @@ Open the file, find the `quotes` array in the script, and add a line like this:
 ```
 
 ---
+
+*Last updated: May 2026*
